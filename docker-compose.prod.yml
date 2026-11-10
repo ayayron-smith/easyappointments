@@ -1,0 +1,39 @@
+# Production stack for The Pink Magnolia booking site.
+# Usage
+#   cp .env.example .env    (then edit the passwords)
+#   docker compose -f docker-compose.prod.yml up -d --build
+
+services:
+    easyappointments:
+        build: .
+        image: pink-magnolia/easyappointments:latest
+        restart: unless-stopped
+        depends_on:
+            - mysql
+        environment:
+            BASE_URL: ${BASE_URL:-https://book.ayayronsmith.com}
+            LANGUAGE: english
+            DEBUG_MODE: 'false'
+            DB_HOST: mysql
+            DB_NAME: easyappointments
+            DB_USERNAME: easyappointments
+            DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+        volumes:
+            - storage:/var/www/html/storage
+        ports:
+            - '${APP_PORT:-8080}:80'
+
+    mysql:
+        image: mysql:8.0
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+            MYSQL_DATABASE: easyappointments
+            MYSQL_USER: easyappointments
+            MYSQL_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+        volumes:
+            - mysql:/var/lib/mysql
+
+volumes:
+    storage:
+    mysql:
