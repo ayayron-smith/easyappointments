@@ -9,7 +9,8 @@ services:
         image: pink-magnolia/easyappointments:latest
         restart: unless-stopped
         depends_on:
-            - mysql
+            mysql:
+                condition: service_healthy
         environment:
             BASE_URL: ${BASE_URL:-https://book.ayayronsmith.com}
             LANGUAGE: english
@@ -33,6 +34,13 @@ services:
             MYSQL_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
         volumes:
             - mysql:/var/lib/mysql
+        healthcheck:
+            # TCP ping only answers once first-run setup is finished and the real server is up
+            test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -u root -p"$$MYSQL_ROOT_PASSWORD" --silent']
+            interval: 5s
+            timeout: 5s
+            retries: 30
+            start_period: 30s
 
 volumes:
     storage:
