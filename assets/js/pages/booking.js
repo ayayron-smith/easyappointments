@@ -374,8 +374,6 @@ App.Pages.Booking = (function () {
             const serviceId = $selectService.val();
             const previousProviderId = $selectProvider.val();
 
-            $selectProvider.parent().prop('hidden', !Boolean(serviceId));
-
             $selectProvider.empty();
 
             $selectProvider.append(new Option(lang('please_select'), ''));
@@ -398,6 +396,9 @@ App.Pages.Booking = (function () {
             });
 
             const providerOptionCount = $selectProvider.find('option').length;
+
+            // Single-operator salon: keep the provider dropdown hidden when only one provider offers the service.
+            $selectProvider.parent().prop('hidden', !Boolean(serviceId) || providerOptionCount === 2);
 
             // Remove the "Please Select" option, if there is only one provider available
 

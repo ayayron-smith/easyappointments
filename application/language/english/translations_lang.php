@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 // English
 $lang['page_title'] = 'Book Appointment With';
-$lang['service_and_provider'] = 'Service & Provider';
+$lang['service_and_provider'] = 'Service Selection';
 $lang['select_service'] = 'Select Service';
 $lang['select_provider'] = 'Select Provider';
 $lang['duration'] = 'Duration';
