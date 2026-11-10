@@ -168,9 +168,10 @@ App.Pages.Booking = (function () {
 
         App.Utils.UI.setDateTimePickerValue($selectDate, new Date());
 
-        const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const isTimezoneSupported = $selectTimezone.find(`option[value="${browserTimezone}"]`).length > 0;
-        $selectTimezone.val(isTimezoneSupported ? browserTimezone : 'UTC');
+        // The timezone dropdown is hidden, so always show times in the business timezone (Settings > General).
+        const defaultTimezone = vars('default_timezone');
+        const isTimezoneSupported = $selectTimezone.find(`option[value="${defaultTimezone}"]`).length > 0;
+        $selectTimezone.val(isTimezoneSupported ? defaultTimezone : 'UTC');
 
         // Bind the event handlers (might not be necessary every time we use this class).
         addEventListeners();
